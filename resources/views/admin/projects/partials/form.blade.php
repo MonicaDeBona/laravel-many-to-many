@@ -83,6 +83,20 @@
                 @enderror
             </div>
 
+            <div class="form-outline mb-3 d-flex justify-content-between">
+                @foreach ($technologies as $technology)
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input" name="technologies[]"
+                            value="{{ $technology->id }}"
+                            @if ($errors->any()) @checked(in_array($technology->id, old('technologies',[])))
+                        @else
+                            @checked($project->technologies->contains($technology->id)) @endif>
+
+                        <label for="project_technologies" class="form-check-label ms-2">{{ $technology->name }}</label>
+                    </div>
+                @endforeach
+            </div>
+
         </div>
         <div class="card-footer">
             <a href="{{ route('admin.projects.index') }}" class="btn btn-dark"><i

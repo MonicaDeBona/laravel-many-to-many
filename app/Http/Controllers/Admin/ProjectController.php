@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class ProjectController extends Controller
         'project_date.required' => 'Please select a project date',
         'project_date.date' => 'Project date must be a valid date',
         'image.required' => 'Choose an image',
-        'type.required' => 'Select type'
+        'type.required' => 'Select type',
     ];
 
     public function validationRules()
@@ -30,7 +31,8 @@ class ProjectController extends Controller
             'content' => 'required|min:10',
             'project_date' => 'required|date',
             'image' => 'required|image|max:300',
-            'type_id' => 'required|exists:types,id'
+            'type_id' => 'required|exists:types,id',
+            'technologies' => 'array|exists:technologies,id'
         ];
     }
     /**
@@ -51,7 +53,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create', ["project" => new Project(), 'types' => Type::all()]);
+        return view('admin.projects.create', ["project" => new Project(), 'types' => Type::all(), 'technologies' => Technology::all()]);
     }
 
     /**
@@ -69,6 +71,7 @@ class ProjectController extends Controller
         $newProject = new Project();
         $newProject->fill($data);
         $newProject->save();
+        $newProject->technologies()->sync($data['technologies']);
 
         return redirect()->route('admin.projects.index')->with('message', "Project $newProject->title has been created")->with('alert-type', 'info');
     }
@@ -94,7 +97,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', ['project' => $project, 'types' => Type::all()]);
+        return view('admin.projects.edit', ['project' => $project, 'types' => Type::all(), 'technologies' => Technology::all()]);
     }
 
     /**
@@ -123,6 +126,7 @@ class ProjectController extends Controller
         }
 
         $project->update($data);
+        $project->technologies()->sync($data['technologies']);
         return redirect()->route('admin.projects.index', compact('project'))->with('message', "Project $project->title has been edited")->with('alert-type', 'info');
     }
 
@@ -134,7 +138,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-
+        $project->technologies()->sync([]);
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', "Project $project->title has been deleted")->with('alert-type', 'danger');
     }
