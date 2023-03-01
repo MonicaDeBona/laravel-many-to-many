@@ -15,6 +15,11 @@
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="img-fluid">
                     @endif
                 </div>
+                <div class="pb-5">
+                    @foreach ($project->technologies as $technology)
+                        #{{ $technology->name }}
+                    @endforeach
+                </div>
                 <p class="card-text text-center fw-bold">{{ $project->content }}</p>
                 <ul class="list-unstyled text-center mb-4">
                     <li class="text-muted"> {{ $project->slug }}</li>
