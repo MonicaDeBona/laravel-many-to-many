@@ -12,17 +12,17 @@
                 </div>
                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                     <p class="card-text text-center">{{ $project->content }}</p>
-                    <hr>
+                    <form action="{{ route('admin.projects.clearType', $project) }}" method="POST" class="d-inline-block p-1">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+                    </form>
                     <p class="card-text text-center">
                         <small class="text-muted">Author: {{ $project->author }}</small><br>
                         <small class="text-muted">Posted on: {{ $project->project_date }}</small>
                     </p>
                 </div>
-                <form action="{{ route('admin.projects.clearType', $project) }}" method="POST" class="d-inline-block p-1">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
-                </form>
+
             </div>
         @endforeach
     </div>

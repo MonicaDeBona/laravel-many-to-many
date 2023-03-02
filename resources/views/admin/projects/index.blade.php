@@ -19,6 +19,7 @@
                     <th scope="col">Title</th>
                     <th scope="col">Author</th>
                     <th scope="col">Project date</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Technologies</th>
                     <th scope="col" class="text-center">
                         <a href="{{ route('admin.projects.create') }}" class="btn btn-sm btn-primary">
@@ -34,6 +35,7 @@
                         <td>{{ $project->title }}</td>
                         <td>{{ $project->author }}</td>
                         <td>{{ $project->project_date }}</td>
+                        <td>{{ $project->type->name ?? 'None' }}</td>
                         <td>
                             @forelse ($project->technologies as $technology)
                                 {{ $technology->name }}

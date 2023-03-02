@@ -71,7 +71,7 @@ class ProjectController extends Controller
         $newProject = new Project();
         $newProject->fill($data);
         $newProject->save();
-        $newProject->technologies()->sync($data['technologies']);
+        $newProject->technologies()->sync($data['technologies'] ?? []);
 
         return redirect()->route('admin.projects.index')->with('message', "Project $newProject->title has been created")->with('alert-type', 'info');
     }
@@ -145,9 +145,10 @@ class ProjectController extends Controller
 
     public function clearType(Project $project)
     {
+        $type = $project->type;
         $project->type_id = null;
         $project->update();
-        return redirect()->route('admin.types.index');
+        return redirect()->route('admin.types.show', compact('type'));
     }
 
     /**
